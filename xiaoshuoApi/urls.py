@@ -18,6 +18,9 @@ urlpatterns = [
 	url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
 	url(r'^makeToken/$',views.MakeToken.as_view()),
+
+	# 爬虫接口
+	url(r'^index/',views.XiaoShuoIndex.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -12,6 +12,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.pagination import LimitOffsetPagination
+# 测试爬虫
+from xiaoshuoApi.Splider.Splider import SpliderPY
+from django.http import HttpResponse
 
 # Token
 from django.contrib.auth.models import User
@@ -101,3 +104,10 @@ class MakeToken(APIView):
 			print("1111")
 			Token.objects.get_or_create(user=user)
 		return Response(status=status.HTTP_204_NO_CONTENT)
+
+# 根据爬虫爬来的内容进行展示
+class XiaoShuoIndex(APIView):
+	def get(self,request, format=None):
+		responseJson = SpliderPY.SoupSplider("http://m.biqukan.com/")
+		# return Response(responseJson,status=status.HTTP_200_OK)
+		return HttpResponse(content=responseJson)
