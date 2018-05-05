@@ -111,3 +111,9 @@ class XiaoShuoIndex(APIView):
 		responseJson = SpliderPY.SoupSplider("http://m.biqukan.com/")
 		# return Response(responseJson,status=status.HTTP_200_OK)
 		return HttpResponse(content=responseJson)
+
+class BookInfo(APIView):
+	def get(self,request, format=None):
+		path = request.query_params.get('path')
+		responseJson = SpliderPY.bookInfoSplider(path)
+		return HttpResponse(content=responseJson)
