@@ -162,6 +162,36 @@ class SpliderPY:
 
         # print(title,author,category,state,wordCount,updateTime,desc)
 
+    # 小说内容
+    @classmethod
+    def ChapContent(cls,url):
+        baseUrl = "http://www.biqukan.com"
+        # url = baseUrl + '/' + pathurl
+        html = urlopen(url)
+        soup = BeautifulSoup(html,"html5lib")
+        # 章节名称
+        title = soup.find("div",{"class":"content"}).find("h1").get_text()
+        # 章节内容
+        content = soup.find("div",{"id":"content"}).get_text()
+        pageChapArray = soup.find("div",{"class":"page_chapter"}).findAll("li")
+        # 上一章
+        prevChap = baseUrl + pageChapArray[0].find("a").get("href")
+        if prevChap.find("html") == -1:
+            prevChap = "已经是第一章"
+        # 下一章
+        nextChap = pageChapArray[2].find("a").get("href")
+        # 如果不是以.html结尾,则为最后一章
+        if nextChap.find("html") == -1 :
+            nextChap = "最后一章"
+
+        dic = dict()
+        dic["chapTitle"] = title
+        dic["pre"] = prevChap
+        dic["next"] = nextChap
+        dic["chapContent"] = content
+        responseJson = json.dumps(dic,ensure_ascii=False)
+        print(responseJson)
+        return responseJson
 
 
 
@@ -176,4 +206,5 @@ class SpliderPY:
 
 # Splider.SoupSplider("http://m.biqukan.com/")
 # SpliderPY.SeleniumSplider("http://m.biqukan.com/")
-SpliderPY.bookInfoSplider("0_790/")
+# SpliderPY.bookInfoSplider("0_790/")
+# SpliderPY.ChapContent("http://www.biqukan.com/0_790/20088431.html")

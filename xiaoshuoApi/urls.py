@@ -22,6 +22,7 @@ urlpatterns = [
 	# 爬虫接口
 	url(r'^index/',views.XiaoShuoIndex.as_view()),
 	url(r'^bookInfo/$',views.BookInfo.as_view()),
+	url(r'^chapContent/$',views.ChapContent.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

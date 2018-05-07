@@ -112,8 +112,16 @@ class XiaoShuoIndex(APIView):
 		# return Response(responseJson,status=status.HTTP_200_OK)
 		return HttpResponse(content=responseJson)
 
+# 小说信息和所有章节
 class BookInfo(APIView):
 	def get(self,request, format=None):
 		path = request.query_params.get('path')
 		responseJson = SpliderPY.bookInfoSplider(path)
+		return HttpResponse(content=responseJson)
+
+# 章节内容
+class ChapContent(APIView):
+	def get(self,request, format=None):
+		path = request.query_params.get('path')
+		responseJson = SpliderPY.ChapContent(path)
 		return HttpResponse(content=responseJson)
