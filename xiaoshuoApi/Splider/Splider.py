@@ -2,7 +2,8 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import json
-
+import re
+# from xiaoshuoApi.Splider.WBTool import WBTool
 # 爬虫类
 class SpliderPY:
 
@@ -171,8 +172,12 @@ class SpliderPY:
         soup = BeautifulSoup(html,"html5lib")
         # 章节名称
         title = soup.find("div",{"class":"content"}).find("h1").get_text()
+
         # 章节内容
         content = soup.find("div",{"id":"content"}).get_text()
+        # 添加换行符
+        out = re.sub(r"\s{2,}", "\n  ", content)
+
         pageChapArray = soup.find("div",{"class":"page_chapter"}).findAll("li")
         # 上一章
         prevChap = baseUrl + pageChapArray[0].find("a").get("href")
@@ -188,11 +193,10 @@ class SpliderPY:
         dic["chapTitle"] = title
         dic["pre"] = prevChap
         dic["next"] = nextChap
-        dic["chapContent"] = content
+        dic["chapContent"] = out
+        # print(out)
         responseJson = json.dumps(dic,ensure_ascii=False)
-        print(responseJson)
         return responseJson
-
 
 
     @classmethod
@@ -207,4 +211,4 @@ class SpliderPY:
 # Splider.SoupSplider("http://m.biqukan.com/")
 # SpliderPY.SeleniumSplider("http://m.biqukan.com/")
 # SpliderPY.bookInfoSplider("0_790/")
-# SpliderPY.ChapContent("http://www.biqukan.com/0_790/20088431.html")
+SpliderPY.ChapContent("http://www.biqukan.com/0_790/20088431.html")
