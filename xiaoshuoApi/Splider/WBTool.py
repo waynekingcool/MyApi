@@ -46,6 +46,9 @@ class WBTool:
 
         # matchObj = re.match(r'^第.章|回$',testStr)
         matchObj = re.match(r'^第[一二三四五六七八九零千百十]*',title)
+        if matchObj is None:
+            print("matchObj为空,Title为:"+title)
+            return 0
         temp = matchObj.group()
         cn = re.sub(r'第','',temp)
 
