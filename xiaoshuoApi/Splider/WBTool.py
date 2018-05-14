@@ -1,6 +1,9 @@
+import re
+
 class WBTool:
     # 汉字转化为数字
-    def cn2dig(self,cn):
+    @classmethod
+    def cn2dig(cls,title):
         CN_NUM = {
             u'〇': 0,
             u'一': 1,
@@ -40,6 +43,11 @@ class WBTool:
             u'億': 100000000,
             u'兆': 1000000000000,
         }
+
+        # matchObj = re.match(r'^第.章|回$',testStr)
+        matchObj = re.match(r'^第[一二三四五六七八九零千百十]*',title)
+        temp = matchObj.group()
+        cn = re.sub(r'第','',temp)
 
         lcn = list(cn)
         unit = 0  # 当前的单位

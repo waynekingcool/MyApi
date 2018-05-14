@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import json
 import re
-# from xiaoshuoApi.Splider.WBTool import WBTool
+from xiaoshuoApi.Splider.WBTool import WBTool
 # 爬虫类
 class SpliderPY:
 
@@ -125,6 +125,10 @@ class SpliderPY:
         lastChap = []
         allChap = []
 
+        # 控制章节 有些坑爹的小说,一章分成好几章..所以设置一个变量,用来控制chapId
+        chapAllId = -1
+        chapLastId = -1
+
         for child in listmain.contents:
             # print(child.name)
             if child.name is None:
@@ -139,16 +143,28 @@ class SpliderPY:
                     isEnd = 1
                 continue
 
+
+
             # 最新章节
             if isEnd == 0:
                 chapUrl = baseUrl + child.find("a").get("href")
                 chapTitle = child.find("a").get_text()
-                lastChap.append({"chapUrl":chapUrl,"chapTitle":chapTitle})
+                if chapLastId == -1 :
+                    chapLastId = WBTool.cn2dig(chapTitle) - 1
+                else:
+                    chapLastId += 1
+                lastChap.append({"chapUrl":chapUrl,"chapTitle":chapTitle,"chapId":chapLastId})
                 # print("last",chapUrl,chapTitle)
+
             elif isEnd == 1:
                 chapUrl = baseUrl + child.find("a").get("href")
                 chapTitle = child.find("a").get_text()
-                allChap.append({"chapUrl":chapUrl,"chapTitle":chapTitle})
+                if chapAllId == -1 :
+                    chapAllId = WBTool.cn2dig(chapTitle) - 1
+                else:
+                    chapAllId += 1
+
+                allChap.append({"chapUrl":chapUrl,"chapTitle":chapTitle,"chapId":chapAllId})
                 # print("all", chapUrl, chapTitle)
 
 
@@ -206,9 +222,19 @@ class SpliderPY:
         elem = driver.find_elements_by_class_name("hot")
         print(elem)
 
+    @classmethod
+    def testRe(cls):
+        testStr = "第六章 升级纸张，还是内容？"
+        # matchObj = re.match(r'^第.章|回$',testStr)
+        matchObj = re.match(r'^第[一二三四五六七八九零千百十]*',testStr)
+        temp = matchObj.group()
+        mystr = re.sub(r'第','',temp)
+        print(mystr)
+
 
 
 # Splider.SoupSplider("http://m.biqukan.com/")
 # SpliderPY.SeleniumSplider("http://m.biqukan.com/")
 # SpliderPY.bookInfoSplider("0_790/")
-SpliderPY.ChapContent("http://www.biqukan.com/0_790/20088431.html")
+# SpliderPY.ChapContent("http://www.biqukan.com/0_790/20088431.html")
+SpliderPY.testRe()
