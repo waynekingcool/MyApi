@@ -200,7 +200,7 @@ class SpliderPY:
         if prevChap.find("html") == -1:
             prevChap = "已经是第一章"
         # 下一章
-        nextChap = pageChapArray[2].find("a").get("href")
+        nextChap = baseUrl + pageChapArray[2].find("a").get("href")
         # 如果不是以.html结尾,则为最后一章
         if nextChap.find("html") == -1 :
             nextChap = "最后一章"
@@ -210,8 +210,10 @@ class SpliderPY:
         dic["pre"] = prevChap
         dic["next"] = nextChap
         dic["chapContent"] = out
+        dic["current"] = url
         # print(out)
         responseJson = json.dumps(dic,ensure_ascii=False)
+        print(responseJson)
         return responseJson
 
 
